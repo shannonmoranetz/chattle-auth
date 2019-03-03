@@ -1,0 +1,49 @@
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import Chatkit from '@pusher/chatkit-server';
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+
+const chatkit = new Chatkit({
+  instanceLocator: "v1:us1:246b3612-b77d-450d-824f-85cf24e32654",
+  key: "951c2259-2aea-459a-ac49-fa4e39a18a34:/Guh5OXpxpfG2czfeaNGwOd8oHh7sgMfLGlXZ7Mv1/E="
+});
+
+app.get('/users', async (req, res) => {
+  chatkit.getUsers()
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
+app.post('/users', (req, res) => {
+  const { username } = req.body;
+  try {
+    chatkit.createUser({
+      id: username,
+      name: username
+    });
+    console.log('User created successfully');
+    res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/auth', (req, res) => {
+  const authData = chatkit.authenticate({
+    userId: req.query.user_id
+  });
+
+  res.status(authData.status)
+    .send(authData.body);
+})
+
+export default app;

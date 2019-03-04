@@ -13,16 +13,6 @@ const chatkit = new Chatkit({
   key: "951c2259-2aea-459a-ac49-fa4e39a18a34:/Guh5OXpxpfG2czfeaNGwOd8oHh7sgMfLGlXZ7Mv1/E="
 });
 
-app.get('/users', async (req, res) => {
-  chatkit.getUsers()
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-})
-
 app.post('/users', (req, res) => {
   const { username } = req.body;
   try {
@@ -33,17 +23,20 @@ app.post('/users', (req, res) => {
     console.log('User created successfully');
     res.sendStatus(201);
   } catch (error) {
-    console.log(error);
+    if (error.error === 'services/chatkit/user_already_exists') {
+      console.log(`${username} already exists.`);
+      res.sendStatus(200);
+    } else {
+      console.log(error);
+    }
   }
-})
+});
 
 app.post('/auth', (req, res) => {
   const authData = chatkit.authenticate({
     userId: req.query.user_id
   });
-
-  res.status(authData.status)
-    .send(authData.body);
-})
+  res.status(authData.status).send(authData.body);
+});
 
 export default app;

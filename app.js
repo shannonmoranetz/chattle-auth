@@ -13,10 +13,10 @@ const chatkit = new Chatkit({
   key: "951c2259-2aea-459a-ac49-fa4e39a18a34:/Guh5OXpxpfG2czfeaNGwOd8oHh7sgMfLGlXZ7Mv1/E="
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   const { username } = req.body;
   try {
-    chatkit.createUser({
+    await chatkit.createUser({
       id: username,
       name: username
     });
@@ -24,7 +24,7 @@ app.post('/users', (req, res) => {
     res.sendStatus(201);
   } catch (error) {
     if (error.error === 'services/chatkit/user_already_exists') {
-      console.log(`${username} already exists.`);
+      console.log(`The username ${username} already exists.`);
       res.sendStatus(200);
     } else {
       console.log(error);

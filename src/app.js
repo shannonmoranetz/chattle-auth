@@ -14,11 +14,12 @@ const chatkit = new Chatkit({
 });
 
 app.post('/users', async (req, res) => {
-  const { username } = req.body;
+  const { username, avatar } = req.body;
   try {
     await chatkit.createUser({
       id: username,
-      name: username
+      name: username,
+      avatarURL: avatar
     });
     console.log('User created successfully');
     res.sendStatus(201);

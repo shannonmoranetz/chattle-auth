@@ -1,1 +1,1 @@
-# secret-project-auth
+# chattle-auth

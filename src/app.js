@@ -19,7 +19,7 @@ app.post('/users', async (req, res) => {
     await chatkit.createUser({
       id: username,
       name: username,
-      avatarURL: avatar || 'https://i.imgur.com/S6BA3Zj.png'
+      avatarURL: avatar || 'https://i.imgur.com/3tW5ciY.png'
     });
     console.log('User created successfully');
     res.sendStatus(201);
